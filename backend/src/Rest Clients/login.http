@@ -1,0 +1,11 @@
+### LOGIN USER
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "duncanoyugi2001@gmail.com",
+  "password": "Dante@1234"
+}
+
+
+

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'; // ✅ This is the missing import
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -12,7 +13,18 @@ import { AdminModule } from './admin/admin.module';
 import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UserModule, VehicleModule, BookingModule, PaymentModule, ReviewModule, AdminModule, MailModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }), // ✅ Now this works
+    PrismaModule,
+    AuthModule,
+    UserModule,
+    VehicleModule,
+    BookingModule,
+    PaymentModule,
+    ReviewModule,
+    AdminModule,
+    MailModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

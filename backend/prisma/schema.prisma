@@ -9,22 +9,21 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   fullName     String
-  email        String   @unique
+  email        String    @unique
   password     String
   phoneNumber  String?
-  role         Role     @default(CUSTOMER)
+  role         Role      @default(CUSTOMER)
   profileImage String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  bookings Booking[]
-  reviews  Review[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+  reviews      Review[]
 }
 
 model Vehicle {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   title         String
   category      String
   pricePerDay   Float
@@ -34,11 +33,10 @@ model Vehicle {
   availableTo   DateTime
   location      String
   createdBy     String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  bookings Booking[] // 👈 Back-reference for Booking
-  reviews  Review[] // 👈 Back-reference for Review
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
+  reviews       Review[]
 }
 
 model Booking {
@@ -49,9 +47,8 @@ model Booking {
   endDate   DateTime
   status    BookingStatus @default(PENDING)
   createdAt DateTime      @default(now())
-
-  user    User    @relation(fields: [userId], references: [id])
-  vehicle Vehicle @relation(fields: [vehicleId], references: [id]) // Valid now
+  user      User          @relation(fields: [userId], references: [id])
+  vehicle   Vehicle       @relation(fields: [vehicleId], references: [id])
 }
 
 model Review {
@@ -61,9 +58,8 @@ model Review {
   userId    String
   vehicleId String
   createdAt DateTime @default(now())
-
-  user    User    @relation(fields: [userId], references: [id])
-  vehicle Vehicle @relation(fields: [vehicleId], references: [id]) // Valid now
+  user      User     @relation(fields: [userId], references: [id])
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
 }
 
 enum Role {
