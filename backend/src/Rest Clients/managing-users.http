@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:3000
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjg0MjcyLCJleHAiOjE3NTE4ODkwNzJ9.pwuKRZOF6A_Vdqqrdaw8O5da08muCPplXbsXiJD8afo
+
+### ✅ Get All Users
+GET {{baseUrl}}/admin/users
+Authorization: {{authToken}}
+
+### 🔍 Find user by email
+GET {{baseUrl}}/admin/user?email=admin@car-rental.com
+Authorization: {{authToken}}
+
+### 🔍 Find user by name (partial match allowed)
+GET {{baseUrl}}/admin/user?name=Duncan
+Authorization: {{authToken}}
+
+### 🔍 Find user by role
+GET {{baseUrl}}/admin/user?role=AGENT
+Authorization: {{authToken}}
+
+### Update a user
+PATCH {{baseUrl}}/admin/update-user/daf9e5b4-b5ef-4836-aa29-8c6671351a35
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "fullName": "Ochieng Duncan Oyugi",
+  "email": "duncanoyugi2001@gmail.com",
+  "phoneNumber": "0791218163",
+  "role": "AGENT"
+}
+
+### Delete a user by ID
+DELETE {{baseUrl}}/admin/delete-user/daf9e5b4-b5ef-4836-aa29-8c6671351a35
+Authorization: {{authToken}}
+
+### Block or unblock a user
+PATCH {{baseUrl}}/admin/block-user/8a332696-e575-4fd7-b02d-b959782e8fe1
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "block": false
+}
+
+
+

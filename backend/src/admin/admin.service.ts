@@ -1,8 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAgentDto } from './dtos/create-agent.dto';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mail/mail.service';
+import { User, Role } from '../../generated/prisma';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class AdminService {
@@ -61,11 +63,45 @@ export class AdminService {
 
     const revenueAgg = await this.prisma.booking.aggregate({
       _sum: {
-        totalPrice: true, // 🔐 Ensure `totalPrice` exists in Booking model
+        totalPrice: true,
+      },
+      where: {
+        status: 'COMPLETED',
       },
     });
 
     const revenue = revenueAgg._sum.totalPrice || 0;
+
+    // Most rented vehicles
+    const mostRented = await this.prisma.booking.groupBy({
+      by: ['vehicleId'],
+      _count: {
+        vehicleId: true,
+      },
+      orderBy: {
+        _count: {
+          vehicleId: 'desc',
+        },
+      },
+      take: 5,
+    });
+
+    const vehicleIds = mostRented.map((v) => v.vehicleId);
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: { id: { in: vehicleIds } },
+    });
+
+    const mostRentedVehicles = vehicles.map((v) => {
+      const rentals = mostRented.find((m) => m.vehicleId === v.id)?._count.vehicleId || 0;
+      return {
+        id: v.id,
+        title: v.title,
+        category: v.category,
+        pricePerDay: v.pricePerDay,
+        location: v.location,
+        totalRentals: rentals,
+      };
+    });
 
     return {
       users: {
@@ -82,6 +118,78 @@ export class AdminService {
         }, {} as Record<string, number>),
       },
       revenue,
+      mostRentedVehicles,
     };
   }
+
+
+  async getAllUsers(): Promise<User[]> {
+    return this.prisma.user.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async findUser(filter: { email?: string; name?: string; role?: Role }) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        ...(filter.email && { email: filter.email }),
+        ...(filter.name && { fullName: { contains: filter.name, mode: 'insensitive' } }),
+        ...(filter.role && { role: filter.role }),
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      ...user,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    };
+  }
+
+  async updateUser(id: string, dto: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: { ...dto },
+    });
+  }
+
+  async deleteUser(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.prisma.user.delete({
+      where: { id },
+    });
+  }
+
+  async toggleBlockUser(id: string, block: boolean) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        isBlocked: block,
+      },
+    });
+  }
+
+
+
+
 }

@@ -21,7 +21,7 @@ import { Vehicle } from 'src/interfaces/vehicle.interface';
 type Role = 'ADMIN' | 'AGENT' | 'CUSTOMER';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('ADMIN')
+@Roles('ADMIN', 'AGENT')
 @Controller('vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
@@ -31,7 +31,7 @@ export class VehicleController {
     @Body() dto: CreateVehicleDto,
     @Request() req,
   ): Promise<Vehicle> {
-    return this.vehicleService.create(dto, req.user.id);
+    return this.vehicleService.create(dto, req.user.sub);
   }
 
   @Put(':id')
@@ -51,4 +51,7 @@ export class VehicleController {
   findAll(): Promise<Vehicle[]> {
     return this.vehicleService.findAll();
   }
+  
+
+
 }

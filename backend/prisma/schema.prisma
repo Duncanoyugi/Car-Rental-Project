@@ -23,6 +23,7 @@ model User {
   resetToken       String?
   resetTokenExpiry DateTime?
   mustChangePassword Boolean   @default(false)
+  isBlocked Boolean @default(false)
   bookings     Booking[]
   reviews      Review[]
 }

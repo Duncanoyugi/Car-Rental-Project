@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:3000
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjg0MjcyLCJleHAiOjE3NTE4ODkwNzJ9.pwuKRZOF6A_Vdqqrdaw8O5da08muCPplXbsXiJD8afo
+
+### Get All Bookings (Admin)
+GET {{baseUrl}}/admin/bookings
+Authorization: {{authToken}}
+
+### UPDATE BOOKING STATUS
+PATCH {{baseUrl}}/admin/booking/BOOKING_ID_HERE/status
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED"
+}

@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:3000
+@authToken = Bearer AGENT_JWT_TOKEN
+
+### Create vehicle
+POST {{baseUrl}}/vehicle
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Mazda Demio",
+  "category": "Economy",
+  "pricePerDay": 2500,
+  "features": ["AC", "Automatic"],
+  "imageUrls": ["https://..."],
+  "availableFrom": "2025-07-01T00:00:00.000Z",
+  "availableTo": "2025-08-01T00:00:00.000Z",
+  "location": "Nairobi"
+}
+
+### View agent's vehicles
+GET {{baseUrl}}/vehicle/my-cars
+Authorization: {{authToken}}
+
+### Update vehicle
+PUT {{baseUrl}}/vehicle/VEHICLE_ID
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "pricePerDay": 2700
+}
+
+### Delete vehicle
+DELETE {{baseUrl}}/vehicle/VEHICLE_ID
+Authorization: {{authToken}}
+
+### Get all bookings for agent's vehicles
+GET {{baseUrl}}/booking/my-vehicles
+Authorization: {{authToken}}
+
+### Update a booking status (CONFIRMED, CANCELLED, etc.)
+PATCH {{baseUrl}}/booking/BOOKING_ID/status
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED"
+}

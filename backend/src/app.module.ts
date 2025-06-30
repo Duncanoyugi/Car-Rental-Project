@@ -11,6 +11,9 @@ import { PaymentModule } from './payment/payment.module';
 import { ReviewModule } from './review/review.module';
 import { AdminModule } from './admin/admin.module';
 import { MailModule } from './mail/mail.module';
+import { AgentController } from './agent/agent.controller';
+import { AgentService } from './agent/agent.service';
+import { AgentModule } from './agent/agent.module';
 
 @Module({
   imports: [
@@ -24,8 +27,9 @@ import { MailModule } from './mail/mail.module';
     ReviewModule,
     AdminModule,
     MailModule,
+    AgentModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, AgentController],
+  providers: [AppService, AgentService],
 })
 export class AppModule {}

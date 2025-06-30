@@ -1,6 +1,9 @@
-### Create Vehicle
-POST http://localhost:3000/vehicle
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjc4MTkyLCJleHAiOjE3NTE4ODI5OTJ9.elDIRvQ_K-7QLBaB_gVd2oG7gjPA7LsicGOSKFsXHtU
+@baseUrl = http://localhost:3000
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjgxNjgwLCJleHAiOjE3NTE4ODY0ODB9.wlhBHvEG_46MxmIrVbL7B4HHbEWXiQ8pmpv6bgpEHJ0
+
+### CREATE VEHICLE
+POST {{baseUrl}}/vehicle
+Authorization: {{authToken}}
 Content-Type: application/json
 
 {
@@ -10,33 +13,35 @@ Content-Type: application/json
   "features": ["Automatic", "AC", "Petrol"],
   "imageUrls": [
     "https://www.kar-men.com/adminPanel/uploads/avis/veh_images/1694669747_p9130431.jpg",
-    "https://www.kar-men.com/adminPanel/uploads/avis/veh_images/1694669747_p9130433.jpg"
+    "https://www.kar-men.com/adminPanel/uploads/avis/veh_images/veh_pic_241745476785.JPG"
   ],
-  "availableFrom": "2025-07-01",
-  "availableTo": "2025-12-31",
+  "availableFrom": "2025-07-01T00:00:00.000Z",
+  "availableTo": "2025-12-31T00:00:00.000Z",
   "location": "Nairobi"
 }
 
-###
+### GET ALL VEHICLES
+GET {{baseUrl}}/vehicle
+Authorization: {{authToken}}
 
-### Get All Vehicles
-GET http://localhost:3000/vehicle
-Authorization: Bearer {{accessToken}}
-
-###
-
-### Update Vehicle
-PUT http://localhost:3000/vehicle/{{vehicleId}}
-Authorization: Bearer {{accessToken}}
+### UPDATE VEHICLE
+PUT {{baseUrl}}/vehicle/beac5f26-4b01-4f7e-a1b3-16c5a50ecea4
+Authorization: {{authToken}}
 Content-Type: application/json
 
 {
   "title": "Toyota Vitz 2021",
-  "pricePerDay": 40.00
+  "category": "Compact",
+  "pricePerDay": 375,
+  "features": ["Automatic", "AC", "Hybrid"],
+  "imageUrls": [
+    "https://example.com/image3.jpg"
+  ],
+  "availableFrom": "2025-08-01T00:00:00.000Z",
+  "availableTo": "2025-12-15T00:00:00.000Z",
+  "location": "Nakuru"
 }
 
-###
-
-### Delete Vehicle
-DELETE http://localhost:3000/vehicle/{{vehicleId}}
-Authorization: Bearer {{accessToken}}
+### DELETE VEHICLE
+DELETE {{baseUrl}}/vehicle/beac5f26-4b01-4f7e-a1b3-16c5a50ecea4
+Authorization: {{authToken}}
