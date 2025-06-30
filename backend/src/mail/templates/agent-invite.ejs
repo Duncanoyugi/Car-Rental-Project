@@ -1,5 +1,54 @@
-<h3>Hello <%= fullName %>,</h3>
-<p>Your agent account has been created on Dante Car Rental.</p>
-<p><b>Email:</b> <%= email %></p>
-<p><b>Temporary Password:</b> <%= tempPassword %></p>
-<p>You can log in here: <a href="<%= loginUrl %>">Login</a></p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Agent Invitation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      .button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #2c3e50;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+
+      p {
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Hello <%= fullName %>,</h2>
+      <p>You’ve been registered as an <strong>Agent</strong> at <strong>Dante Car Rental</strong>.</p>
+      <p>Your login credentials are:</p>
+
+      <p><strong>Email:</strong> <%= email %></p>
+      <p><strong>Temporary Password:</strong> <%= tempPassword %></p>
+
+      <a href="<%= loginUrl %>" class="button">Login Now</a>
+
+      <p>Please login and change your password immediately.</p>
+
+      <p>Welcome aboard!<br />- Dante Car Rental Admin Team</p>
+    </div>
+  </body>
+</html>

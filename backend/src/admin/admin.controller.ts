@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAgentDto } from './dtos/create-agent.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -14,5 +14,10 @@ export class AdminController {
   @Post('create-agent')
   createAgent(@Body() dto: CreateAgentDto) {
     return this.adminService.createAgent(dto);
+  }
+
+  @Get('stats')
+  getStats() {
+    return this.adminService.getSystemStats();
   }
 }

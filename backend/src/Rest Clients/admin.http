@@ -6,3 +6,21 @@ Content-Type: application/json
   "email": "admin@car-rental.com",
   "password": "admin123"
 }
+
+
+### Create Agent (ADMIN only)
+POST http://localhost:3000/admin/create-agent
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjc2MDU2LCJleHAiOjE3NTE4ODA4NTZ9.FSQ3jWntl2MDr827OnHCUiRkJHHwDgzYlGhaq2aqzGw
+
+{
+  "fullName": "Eddy Kilonzo",
+  "email": "eddymax3715@gmail.com",
+  "phoneNumber": "+254701234567"
+}
+
+### Admin Stats Endpoint
+GET http://localhost:3000/admin/stats
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjc2MDU2LCJleHAiOjE3NTE4ODA4NTZ9.FSQ3jWntl2MDr827OnHCUiRkJHHwDgzYlGhaq2aqzGw
+
+

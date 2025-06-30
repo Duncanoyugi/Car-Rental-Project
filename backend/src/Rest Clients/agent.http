@@ -1,0 +1,40 @@
+### LOGIN AGENT
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "eddymax3715@gmail.com",
+  "password": "9ffy3n6d"
+}
+
+
+### Change Password
+POST http://localhost:3000/auth/change-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4YTMzMjY5Ni1lNTc1LTRmZDctYjAyZC1iOTU5NzgyZThmZTEiLCJlbWFpbCI6ImVkZHltYXgzNzE1QGdtYWlsLmNvbSIsInJvbGUiOiJBR0VOVCIsImlhdCI6MTc1MTI3MTc1MCwiZXhwIjoxNzUxODc2NTUwfQ.19-6foA7QhtyqSVRNrIVrDwu-h9Q_uL41MAiVjWoYRY
+
+{
+  "currentPassword": "9ffy3n6d",
+  "newPassword": "eddy@1234"
+}
+
+### Request reset code
+POST http://localhost:3000/auth/request-reset
+Content-Type: application/json
+
+{
+  "email": "eddymax3715@gmail.com"
+}
+
+### Confirm reset with code and new password
+POST http://localhost:3000/auth/confirm-reset
+Content-Type: application/json
+
+{
+  "email": "eddymax3715@gmail.com",
+  "code": "123456",
+  "newPassword": "NewStrongPass123!"
+}
+
+
+

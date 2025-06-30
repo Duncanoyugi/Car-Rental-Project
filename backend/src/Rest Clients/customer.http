@@ -1,0 +1,39 @@
+### Register as Customer
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Duncan Oyugi",
+  "email": "duncanoyugi2001@gmail.com",
+  "password": "Dante@1234",
+  "phoneNumber": "+254791218163",
+  "profileImage": "https://res.cloudinary.com/demo/image/upload/v123456789/avatar.png"
+}
+
+### LOGIN USER
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "duncanoyugi2001@gmail.com",
+  "password": "Dante@7827"
+}
+
+### Request reset code
+POST http://localhost:3000/auth/request-reset
+Content-Type: application/json
+
+{
+  "email": "duncanoyugi2001@gmail.com"
+}
+
+### Confirm reset with code and new password
+POST http://localhost:3000/auth/confirm-reset
+Content-Type: application/json
+
+{
+  "email": "duncanoyugi2001@gmail.com",
+  "code": "900896",
+  "newPassword": "Dante@7827"
+}
+

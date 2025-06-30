@@ -1,0 +1,42 @@
+### Create Vehicle
+POST http://localhost:3000/vehicle
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ZDdkYTkyNy0zZGQ3LTQ1ZDMtOGMwMC0wMGM4MGY4ZDFhZGUiLCJlbWFpbCI6ImFkbWluQGNhci1yZW50YWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUxMjc4MTkyLCJleHAiOjE3NTE4ODI5OTJ9.elDIRvQ_K-7QLBaB_gVd2oG7gjPA7LsicGOSKFsXHtU
+Content-Type: application/json
+
+{
+  "title": "Toyota Vitz 2020",
+  "category": "Economy",
+  "pricePerDay": 354,
+  "features": ["Automatic", "AC", "Petrol"],
+  "imageUrls": [
+    "https://www.kar-men.com/adminPanel/uploads/avis/veh_images/1694669747_p9130431.jpg",
+    "https://www.kar-men.com/adminPanel/uploads/avis/veh_images/1694669747_p9130433.jpg"
+  ],
+  "availableFrom": "2025-07-01",
+  "availableTo": "2025-12-31",
+  "location": "Nairobi"
+}
+
+###
+
+### Get All Vehicles
+GET http://localhost:3000/vehicle
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Update Vehicle
+PUT http://localhost:3000/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Toyota Vitz 2021",
+  "pricePerDay": 40.00
+}
+
+###
+
+### Delete Vehicle
+DELETE http://localhost:3000/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}

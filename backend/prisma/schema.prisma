@@ -18,6 +18,11 @@ model User {
   profileImage String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  isEmailVerified Boolean  @default(false)
+  emailVerifyToken String? 
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  mustChangePassword Boolean   @default(false)
   bookings     Booking[]
   reviews      Review[]
 }
@@ -40,16 +45,19 @@ model Vehicle {
 }
 
 model Booking {
-  id        String        @id @default(uuid())
-  userId    String
-  vehicleId String
-  startDate DateTime
-  endDate   DateTime
-  status    BookingStatus @default(PENDING)
-  createdAt DateTime      @default(now())
-  user      User          @relation(fields: [userId], references: [id])
-  vehicle   Vehicle       @relation(fields: [vehicleId], references: [id])
+  id         String        @id @default(uuid())
+  userId     String
+  vehicleId  String
+  startDate  DateTime
+  endDate    DateTime
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  totalPrice Float?        // 👈 Add this line
+
+  user       User          @relation(fields: [userId], references: [id])
+  vehicle    Vehicle       @relation(fields: [vehicleId], references: [id])
 }
+
 
 model Review {
   id        String   @id @default(uuid())

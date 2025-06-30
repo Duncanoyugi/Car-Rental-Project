@@ -15,7 +15,7 @@ export class AdminService {
     const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (existing) throw new BadRequestException('Email already exists');
 
-    const tempPassword = Math.random().toString(36).slice(-8); // random 8-char string
+    const tempPassword = Math.random().toString(36).slice(-8);
     const hashed = await bcrypt.hash(tempPassword, 10);
 
     const agent = await this.prisma.user.create({
@@ -25,6 +25,7 @@ export class AdminService {
         password: hashed,
         phoneNumber: dto.phoneNumber,
         role: 'AGENT',
+        mustChangePassword: true,
       },
     });
 
@@ -41,5 +42,46 @@ export class AdminService {
     });
 
     return `Agent ${agent.fullName} created and invite sent.`;
+  }
+
+  async getSystemStats() {
+    const [totalUsers, totalAgents, totalCustomers] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.user.count({ where: { role: 'AGENT' } }),
+      this.prisma.user.count({ where: { role: 'CUSTOMER' } }),
+    ]);
+
+    const totalVehicles = await this.prisma.vehicle.count();
+    const totalBookings = await this.prisma.booking.count();
+
+    const bookingStatusCounts = await this.prisma.booking.groupBy({
+      by: ['status'],
+      _count: true,
+    });
+
+    const revenueAgg = await this.prisma.booking.aggregate({
+      _sum: {
+        totalPrice: true, // 🔐 Ensure `totalPrice` exists in Booking model
+      },
+    });
+
+    const revenue = revenueAgg._sum.totalPrice || 0;
+
+    return {
+      users: {
+        total: totalUsers,
+        agents: totalAgents,
+        customers: totalCustomers,
+      },
+      vehicles: totalVehicles,
+      bookings: {
+        total: totalBookings,
+        byStatus: bookingStatusCounts.reduce((acc, curr) => {
+          acc[curr.status] = curr._count;
+          return acc;
+        }, {} as Record<string, number>),
+      },
+      revenue,
+    };
   }
 }
