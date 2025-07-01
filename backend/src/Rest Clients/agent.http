@@ -32,8 +32,8 @@ Content-Type: application/json
 
 {
   "email": "eddymax3715@gmail.com",
-  "code": "123456",
-  "newPassword": "NewStrongPass123!"
+  "code": "990603",
+  "newPassword": "max@1234"
 }
 
 

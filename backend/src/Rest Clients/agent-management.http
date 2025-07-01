@@ -46,3 +46,11 @@ Content-Type: application/json
 {
   "status": "CONFIRMED"
 }
+
+### Manage Users
+GET {{baseUrl}}/agent/customers
+Authorization: {{authToken}}
+
+### Manage Payment
+GET {{baseUrl}}/agent/payments
+Authorization: {{authToken}}

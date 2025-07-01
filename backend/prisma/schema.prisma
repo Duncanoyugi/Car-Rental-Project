@@ -9,23 +9,23 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  fullName     String
-  email        String    @unique
-  password     String
-  phoneNumber  String?
-  role         Role      @default(CUSTOMER)
-  profileImage String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  isEmailVerified Boolean  @default(false)
-  emailVerifyToken String? 
-  resetToken       String?
-  resetTokenExpiry DateTime?
+  id                 String    @id @default(uuid())
+  fullName           String
+  email              String    @unique
+  password           String
+  phoneNumber        String?
+  role               Role      @default(CUSTOMER)
+  profileImage       String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  isEmailVerified    Boolean   @default(false)
+  emailVerifyToken   String?
+  resetToken         String?
+  resetTokenExpiry   DateTime?
   mustChangePassword Boolean   @default(false)
-  isBlocked Boolean @default(false)
-  bookings     Booking[]
-  reviews      Review[]
+  isBlocked          Boolean   @default(false)
+  bookings           Booking[]
+  reviews            Review[]
 }
 
 model Vehicle {
@@ -53,12 +53,12 @@ model Booking {
   endDate    DateTime
   status     BookingStatus @default(PENDING)
   createdAt  DateTime      @default(now())
-  totalPrice Float?        // 👈 Add this line
+  totalPrice Float?
 
-  user       User          @relation(fields: [userId], references: [id])
-  vehicle    Vehicle       @relation(fields: [vehicleId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+  vehicle Vehicle  @relation(fields: [vehicleId], references: [id])
+  payment Payment? @relation("BookingPayment") // ✅ Add this line
 }
-
 
 model Review {
   id        String   @id @default(uuid())
@@ -69,6 +69,17 @@ model Review {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  bookingId String   @unique
+  amount    Float
+  method    String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  booking Booking @relation("BookingPayment", fields: [bookingId], references: [id]) // ✅ Add relation name
 }
 
 enum Role {

@@ -14,6 +14,7 @@ import { MailModule } from './mail/mail.module';
 import { AgentController } from './agent/agent.controller';
 import { AgentService } from './agent/agent.service';
 import { AgentModule } from './agent/agent.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AgentModule } from './agent/agent.module';
     AdminModule,
     MailModule,
     AgentModule,
+    CustomerModule,
   ],
   controllers: [AppController, AgentController],
   providers: [AppService, AgentService],
