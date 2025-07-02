@@ -1,97 +1,214 @@
 <div class="home-container">
   <!-- Hero Section -->
-  <section class="hero-section">
+  <section class="hero-section" aria-label="Hero Section">
     <div class="hero-content">
-      <h1 class="hero-title">Find Your Perfect Rental Car</h1>
-      <p class="hero-subtitle">Choose from our wide selection of vehicles for your next adventure</p>
-      
-      <!-- Quick Search Form -->
-      <div class="search-form">
-        <form #searchForm="ngForm" (ngSubmit)="onSearchVehicles(searchForm.value)">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="location">Pickup Location</label>
-              <input type="text" id="location" name="location" ngModel 
-                     placeholder="Enter city or location" class="form-control">
-            </div>
-            
-            <div class="form-group">
-              <label for="startDate">Pickup Date</label>
-              <input type="date" id="startDate" name="startDate" ngModel 
-                     class="form-control" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="endDate">Return Date</label>
-              <input type="date" id="endDate" name="endDate" ngModel 
-                     class="form-control" required>
-            </div>
-            
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary search-btn">
-                Search Cars
-              </button>
-            </div>
-          </div>
-        </form>
+      <div class="hero-text">
+        <h1>Find Your Perfect Rental Car</h1>
+        <p>Choose from hundreds of cars at the best prices. Book instantly and drive away with confidence.</p>
+        <button class="cta-button" (click)="scrollToSearch()" aria-label="Start Your Journey">Start Your Journey</button>
+      </div>
+      <div class="hero-image">
+        <img src="assets/images/hero-car.png" alt="Premium rental car" />
       </div>
     </div>
   </section>
 
-  <!-- Featured Vehicles Section -->
-  <section class="featured-section">
-    <div class="container">
-      <h2 class="section-title">Featured Vehicles</h2>
-      
-      <div class="loading" *ngIf="isLoading">
-        Loading featured vehicles...
-      </div>
-      
-      <div class="vehicles-grid" *ngIf="!isLoading">
-        <div class="vehicle-card" *ngFor="let vehicle of featuredVehicles" 
-             (click)="viewVehicleDetails(vehicle.id)">
-          <div class="vehicle-image">
-            <img [src]="vehicle.images[0]?.url" [alt]="vehicle.make + ' ' + vehicle.model">
+  <!-- Search Section -->
+  <section class="search-section" #searchSection aria-label="Search Available Cars">
+    <div class="search-container">
+      <h2>Search Available Cars</h2>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="location">Pickup Location</label>
+            <input
+              type="text"
+              id="location"
+              formControlName="location"
+              placeholder="Enter city or location"
+              class="form-control"
+              aria-required="true"
+            />
           </div>
-          <div class="vehicle-info">
-            <h3>{{vehicle.make}} {{vehicle.model}}</h3>
-            <p class="vehicle-year">{{vehicle.year}}</p>
-            <p class="vehicle-category">{{vehicle.category}}</p>
-            <div class="vehicle-features">
-              <span class="feature">{{vehicle.seats}} seats</span>
-              <span class="feature">{{vehicle.transmission}}</span>
-              <span class="feature">{{vehicle.fuelType}}</span>
+          <div class="form-group">
+            <label for="category">Car Category</label>
+            <select id="category" formControlName="category" class="form-control">
+              <option value="">All Categories</option>
+              <option *ngFor="let category of vehicleCategories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Pickup Date</label>
+            <input
+              type="datetime-local"
+              id="startDate"
+              formControlName="startDate"
+              class="form-control"
+              aria-required="true"
+            />
+          </div>
+          <div class="form-group">
+            <label for="endDate">Return Date</label>
+            <input
+              type="datetime-local"
+              id="endDate"
+              formControlName="endDate"
+              class="form-control"
+              aria-required="true"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="minPrice">Min Price ($)</label>
+            <input
+              type="number"
+              id="minPrice"
+              formControlName="minPrice"
+              placeholder="0"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label for="maxPrice">Max Price ($)</label>
+            <input
+              type="number"
+              id="maxPrice"
+              formControlName="maxPrice"
+              placeholder="1000"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="search-button" [disabled]="searching" aria-label="Search Cars">
+          <span *ngIf="searching">Searching...</span>
+          <span *ngIf="!searching">Search Cars</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Featured Cars Section -->
+  <section class="featured-section" aria-label="Featured Vehicles">
+    <div class="container">
+      <h2>Featured Vehicles</h2>
+      <div class="featured-grid" *ngIf="featuredVehicles.length > 0">
+        <div class="car-card" *ngFor="let vehicle of featuredVehicles">
+          <div class="car-image">
+            <img [src]="vehicle.imageUrls[0] || 'assets/images/default-car.jpg'" [alt]="vehicle.title" />
+            <div class="price-badge">${{ vehicle.pricePerDay }}/day</div>
+          </div>
+          <div class="car-details">
+            <h3>{{ vehicle.title }}</h3>
+            <p class="category">{{ vehicle.category }}</p>
+            <p class="location">📍 {{ vehicle.location }}</p>
+            <div class="features">
+              <span *ngFor="let feature of vehicle.features.slice(0, 3)" class="feature-tag">
+                {{ feature }}
+              </span>
             </div>
-            <div class="vehicle-price">
-              <span class="price">${{vehicle.pricePerDay}}/day</span>
+            <button class="book-button" (click)="viewVehicle(vehicle.id)" aria-label="View Details">
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="loading" *ngIf="loadingFeatured">
+        <p>Loading featured vehicles...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Results Section -->
+  <section class="results-section" *ngIf="searchResults.length > 0" aria-label="Search Results">
+    <div class="container">
+      <h2>Search Results ({{ searchResults.length }} cars found)</h2>
+      <div class="results-grid">
+        <div class="car-card" *ngFor="let vehicle of searchResults">
+          <div class="car-image">
+            <img [src]="vehicle.imageUrls[0] || 'assets/images/default-car.png'" [alt]="vehicle.title" />
+            <div class="price-badge">${{ vehicle.pricePerDay }}/day</div>
+          </div>
+          <div class="car-details">
+            <h3>{{ vehicle.title }}</h3>
+            <p class="category">{{ vehicle.category }}</p>
+            <p class="location">📍 {{ vehicle.location }}</p>
+            <div class="features">
+              <span *ngFor="let feature of vehicle.features.slice(0, 3)" class="feature-tag">
+                {{ feature }}
+              </span>
             </div>
+            <button class="book-button" (click)="viewVehicle(vehicle.id)" aria-label="View Details">
+              View Details
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How It Works Section -->
-  <section class="how-it-works">
+  <!-- Why Choose Us Section -->
+  <section class="features-section" aria-label="Why Choose Our Service">
     <div class="container">
-      <h2 class="section-title">How It Works</h2>
-      <div class="steps-grid">
-        <div class="step">
-          <div class="step-icon">🔍</div>
-          <h3>Search & Compare</h3>
-          <p>Find the perfect car for your needs from our extensive fleet</p>
+      <h2>Why Choose Our Service</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">💰</div>
+          <h3>Best Prices</h3>
+          <p>Competitive pricing with transparent fees and no hidden charges.</p>
         </div>
-        <div class="step">
-          <div class="step-icon">📅</div>
-          <h3>Book Online</h3>
-          <p>Reserve your vehicle instantly with our easy booking system</p>
+        <div class="feature-item">
+          <div class="feature-icon">🛡️</div>
+          <h3>Secure & Safe</h3>
+          <p>All vehicles are regularly maintained and fully insured for your safety.</p>
         </div>
-        <div class="step">
-          <div class="step-icon">🚗</div>
-          <h3>Pick Up & Drive</h3>
-          <p>Collect your car and enjoy your journey</p>
+        <div class="feature-item">
+          <div class="feature-icon">🚗</div>
+          <h3>Wide Selection</h3>
+          <p>Choose from hundreds of vehicles across all categories and price ranges.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant Booking</h3>
+          <p>Book your car instantly with our streamlined reservation system.</p>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section" aria-label="Customer Testimonials">
+    <div class="container">
+      <h2>What Our Customers Say</h2>
+      <div class="testimonials-slider" *ngIf="testimonials.length > 0">
+        <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+          <p class="testimonial-text">"{{ testimonial.text }}"</p>
+          <p class="testimonial-author">- {{ testimonial.author }}</p>
+        </div>
+      </div>
+      <div class="loading" *ngIf="loadingTestimonials">
+        <p>Loading testimonials...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer-section" aria-label="Footer">
+    <div class="container">
+      <p>© {{ currentYear }} Car Rental Service. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a routerLink="/about" aria-label="About Us">About Us</a></li>
+        <li><a routerLink="/contact" aria-label="Contact">Contact</a></li>
+        <li><a routerLink="/privacy" aria-label="Privacy Policy">Privacy Policy</a></li>
+        <li><a routerLink="/terms" aria-label="Terms of Service">Terms of Service</a></li>
+      </ul>
+    </div>
+  </footer>
 </div>

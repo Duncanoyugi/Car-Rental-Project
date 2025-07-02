@@ -1,15 +1,109 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-    <div>
-      <label for="email">Email:</label>
-      <input id="email" formControlName="email" type="email" required>
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your account to continue</p>
     </div>
-    <div>
-      <label for="password">Password:</label>
-      <input id="password" formControlName="password" type="password" required>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="loginForm.get('email')?.touched && loginForm.get('email')?.errors"
+          placeholder="Enter your email"
+        />
+        <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+          Email is required
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+          Please enter a valid email address
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.error]="loginForm.get('password')?.touched && loginForm.get('password')?.errors"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+          >
+            <span *ngIf="!showPassword">👁️</span>
+            <span *ngIf="showPassword">🙈</span>
+          </button>
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+          Password is required
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+          Password must be at least 6 characters long
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="rememberMe" />
+          <span class="checkmark"></span>
+          Remember me
+        </label>
+        <a routerLink="/auth/forgot-password" class="forgot-link">
+          Forgot Password?
+        </a>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button
+        type="submit"
+        class="auth-button"
+        [disabled]="loginForm.invalid || loading"
+      >
+        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Signing In...</span>
+      </button>
+    </form>
+
+    <div class="auth-divider">
+      <span>or</span>
     </div>
-    <button type="submit" [disabled]="loginForm.invalid">Login</button>
-  </form>
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+    <div class="social-login">
+      <button class="social-button google" (click)="loginWithGoogle()" [disabled]="loading">
+        <img src="assets/images/google-icon.svg" alt="Google" />
+        Continue with Google
+      </button>
+      <button class="social-button facebook" (click)="loginWithFacebook()" [disabled]="loading">
+        <img src="assets/images/facebook-icon.svg" alt="Facebook" />
+        Continue with Facebook
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      <p>
+        Don't have an account?
+        <a routerLink="/auth/register" class="auth-link">Sign up here</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="auth-background">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+  </div>
 </div>

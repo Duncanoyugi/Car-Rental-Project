@@ -9,7 +9,6 @@ import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
 import { Vehicle } from 'src/interfaces/vehicle.interface';
 import { Vehicle as PrismaVehicle } from '../../generated/prisma';
 
-
 @Injectable()
 export class VehicleService {
   constructor(private readonly prisma: PrismaService) {}
@@ -134,5 +133,14 @@ export class VehicleService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async getFeaturedVehicles(): Promise<Vehicle[]> {
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }, // Last 7 days as featured
+      take: 6, // Limit to 6 vehicles
+      orderBy: { createdAt: 'desc' },
+    });
+    return vehicles.map((v) => this.mapToInterface(v));
   }
 }

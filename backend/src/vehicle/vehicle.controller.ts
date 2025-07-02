@@ -20,7 +20,7 @@ import { Vehicle } from 'src/interfaces/vehicle.interface';
 import { Role } from '../../generated/prisma';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('vehicle')
+@Controller('vehicles')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
@@ -46,6 +46,12 @@ export class VehicleController {
   @Roles(Role.ADMIN, Role.AGENT)
   findAll(): Promise<Vehicle[]> {
     return this.vehicleService.findAll();
+  }
+
+  @Get('featured')
+  @Roles(Role.ADMIN, Role.AGENT, Role.CUSTOMER) // Allow customers to view featured vehicles
+  getFeaturedVehicles(): Promise<Vehicle[]> {
+    return this.vehicleService.getFeaturedVehicles(); // Ensure this method exists in VehicleService
   }
 
   @Get('browse')
